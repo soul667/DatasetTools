@@ -1,0 +1,17 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+**/*.mp4
+**/camera/**/*.jpg
+**/camera/**/*.png
+**/camera/**/time_stamp.json
+
+
+# **/camera/**/hand_right_depth.png

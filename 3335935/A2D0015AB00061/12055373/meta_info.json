@@ -1,0 +1,58 @@
+{
+    "duration": 111.483339147,
+    "clip_start_time": 1750188365.1844313,
+    "clip_end_time": 1750188476.6677704,
+    "ip_info": "192.168.62.61",
+    "robot_type": "A2D",
+    "AID": "A2D0001AB00043",
+    "version": "v0.0.2",
+    "author": "agibot",
+    "sensor_type": [
+        "rgbd",
+        "rgbd",
+        "rgbd"
+    ],
+    "camera_list": [
+        "head",
+        "hand_right",
+        "hand_left"
+    ],
+    "camera_type": [
+        "d455",
+        "d405",
+        "d405"
+    ],
+    "camera_fps": [
+        30,
+        30,
+        30
+    ],
+    "is_aligned": true,
+    "ee_list": [
+        {
+            "name": "left_hand",
+            "type": "zhiyuan_gripper_omnipicker"
+        },
+        {
+            "name": "right_hand",
+            "type": "zhiyuan_gripper_omnipicker"
+        }
+    ],
+    "md5": {},
+    "integrity": {
+        "integrity": true,
+        "reason": ""
+    },
+    "fps": {
+        "head": 30,
+        "hand_right": 30,
+        "hand_left": 30
+    },
+    "episode_token": "5aee9eb1-4144-4f9f-b67b-3637b76529e7",
+    "task_id": 0,
+    "job_id": 0,
+    "text": "{\"description\":\"SIM\"]}",
+    "create_time": "2025-06-18 03:26:05",
+    "file_size": 343642.312,
+    "episode_id": 0
+}

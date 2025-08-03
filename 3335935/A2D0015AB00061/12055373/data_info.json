@@ -1,0 +1,41 @@
+{
+    "episode_id": 12055373,
+    "task_id": 2810137,
+    "task_name": "超市打包",
+    "data_type": "常规",
+    "job_id": 3335935,
+    "init_scene_text": "",
+    "raw_data_path": "",
+    "aligned_data_path": "",
+    "visualizing_data_path": "",
+    "sn_code": "A2D0015AB00061",
+    "label_info": {
+        "error_label": "",
+        "action_config": [
+            {
+                "start_frame": 18,
+                "end_frame": 254,
+                "action_text": "右臂拿起台面上的葡萄汁",
+                "skill": "Pick",
+                "english_action_text": "Pick up the grape juice on the table with the right arm."
+            },
+            {
+                "start_frame": 255,
+                "end_frame": 553,
+                "action_text": "右臂将拿着的葡萄汁放进台面上的毛毡袋内",
+                "skill": "Place",
+                "english_action_text": "Put the grape juice into the felt bag on the table with the right arm."
+            }
+        ],
+        "key_frame": {
+            "signal": [],
+            "dual": []
+        },
+        "cloud_post_processing_result": {
+            "data_valid": true,
+            "drop_frame_rate": 0.0,
+            "filter_frame_rate": 0.0
+        }
+    },
+    "english_task_name": "Pack in the supermarket"
+}

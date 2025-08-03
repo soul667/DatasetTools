@@ -1,0 +1,2 @@
+SourceDatasetPath="E:/code/DatasetTools" # 使用绝对路径
+OutDatasetPath="E:/code/DatasetTools/outdataset" # 输出的数据集路径

@@ -1,0 +1,17 @@
+{
+        "observation.images.head": {
+            "dtype": "video",
+            "shape": (3, 720, 1280),  # Assuming standard RGB camera resolution
+            "names": None
+        },
+        "observation.images.hand_right": {
+            "dtype": "video",
+            "shape": (3, 480, 848),
+            "names": None
+        },
+        "observation.images.hand_left": {
+            "dtype": "video",
+            "shape": (3, 480, 848),
+            "names": None
+        }
+    }

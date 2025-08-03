@@ -1,0 +1,12 @@
+[project]
+name = "datasettools"
+version = "0.1.0"
+description = "a simple tools convert agibot datatasets to more genral format(lerobot) ane visualize them"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "lerobot>=0.3.2",
+    "toml>=0.10.2",
+    "tyro>=0.9.27",
+]
+    
