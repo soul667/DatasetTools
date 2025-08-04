@@ -232,17 +232,20 @@ def get_all_tasks_sim(src_path: Path, output_path: Path):
         local_dir = output_path / "agibotworld" / "sim" / Path(root).name
         if not local_dir.exists():
             local_dir.mkdir(parents=True, exist_ok=True)
+        # 处理的任务ID不对
         yield (json_file, local_dir.resolve())
 
 def save_as_lerobot_dataset(agibot_world_config, task: tuple[Path, Path], num_threads, save_depth, debug):
     json_file, local_dir = task
-    print(f"processing {json_file.stem}, saving to {local_dir}")
+    task_id= "2810137"  # TODO: FIX
+    print(f"processing {task_id}, saving to {local_dir}")
+    
     src_path = json_file.parent.parent
     task_info = get_task_info(json_file)
     task_name = task_info[0]["task_name"]
     task_init_scene = task_info[0]["init_scene_text"]
     task_instruction = f"{task_name} | {task_init_scene}"
-    task_id = json_file.stem.split("_")[-1]
+    # task_id = json_file.stem.split("_")[-1]
     task_info = {episode["episode_id"]: episode for episode in task_info}
 
     features = generate_features_from_config(agibot_world_config)
@@ -250,25 +253,34 @@ def save_as_lerobot_dataset(agibot_world_config, task: tuple[Path, Path], num_th
     if local_dir.exists():
         shutil.rmtree(local_dir)
 
-    if not save_depth:
-        features.pop("observation.images.head_depth")
+    # print(f'features: {features}')
+    # if not save_depth:
+    #     features.pop("observation.images.head_depth")
 
     dataset: AgiBotDataset = AgiBotDataset.create(
-        repo_id=json_file.stem,
+        repo_id= f"{task_id}",
         root=local_dir,
         fps=30,
         robot_type="a2d",
         features=features,
     )
+    all_subdir=[]
+    for root, dirs, files in os.walk(src_path):
+        if "data_info.json" in files:
+            all_subdir += [Path(root)]
 
-    all_subdir = [f.as_posix() for f in src_path.glob(f"observations/{task_id}/*") if f.is_dir()]
+    # print(f"Found {len(all_subdir)} subdirectories in {src_path / 'observations' / task_id}")
+    print(f"Found {len(all_subdir)} subdirectories in {src_path}")
+    # all_subdir_eids = [int(subdir.name.split("_")[-1]) for subdir in all_subdir if subdir.name.startswith("episode_")]
     all_subdir_eids = sorted([int(Path(path).name) for path in all_subdir])
 
+    print(f"Found {len(all_subdir_eids)} episode IDs in {src_path}")
     if debug or not save_depth:
         for eid in all_subdir_eids:
             if eid not in task_info:
                 print(f"{json_file.stem}, episode_{eid} not in task_info.json, skipping...")
                 continue
+            print(f"Processing episode_{eid} in {json_file.stem}")
             action_config = task_info[eid]["label_info"]["action_config"]
             raw_dataset = load_local_dataset(
                 eid,
@@ -342,8 +354,8 @@ def main(
     debug: bool = False,
 ):
     #print(f'debug mode: {debug}, save_depth: {save_depth}')
-    tasks = get_all_tasks_sim(src_path, output_path)
-    print(f"Total tasks found: {len(list(tasks))}")
+    tasks = list(get_all_tasks_sim(src_path, output_path)) # 原来返回的是一次性迭代器
+    print(f"Total tasks found: {len(tasks)}")
 
     agibot_world_config, type_task_ids = (
         AgiBotWorld_TASK_TYPE[eef_type]["task_config"],
@@ -353,6 +365,7 @@ def main(
     if eef_type == "sim":
         pass
     else:
+        print(f"Using AgiBotWorld config for {eef_type}: {agibot_world_config}")
         if eef_type == "gripper":
             remaining_ids = AgiBotWorld_TASK_TYPE["dexhand"]["task_ids"] + AgiBotWorld_TASK_TYPE["tactile"]["task_ids"]
             tasks = filter(lambda task: task[0].stem not in remaining_ids, tasks)
@@ -363,7 +376,8 @@ def main(
             tasks = filter(lambda task: task[0].stem in task_ids, tasks)
 
     if debug:
-        save_as_lerobot_dataset(agibot_world_config, next(tasks), num_threads_per_task, save_depth, debug)
+        # print(f"Debug mode enabled, processing only the first task: {tasks}")
+        save_as_lerobot_dataset(agibot_world_config,tasks[0], num_threads_per_task, save_depth, debug)
     else:
         runtime_env = RuntimeEnv(
             env_vars={
@@ -375,11 +389,13 @@ def main(
         ray.init(runtime_env=runtime_env)
         resources = ray.available_resources()
         cpus = int(resources["CPU"])
+        # print(f"Total tasks found: {len(list(tasks))}")
 
         print(f"Available CPUs: {cpus}, num_cpus_per_task: {cpus_per_task}")
 
         remote_task = ray.remote(save_as_lerobot_dataset).options(num_cpus=cpus_per_task)
         futures = []
+        
         for task in tasks:
             futures.append(
                 (task[0].stem, remote_task.remote(agibot_world_config, task, num_threads_per_task, save_depth, debug))
@@ -400,7 +416,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--src-path", type=Path, required=True)
     parser.add_argument("--output-path", type=Path, required=True)
-    parser.add_argument("--eef-type", type=str, choices=["gripper", "dexhand", "tactile"], default="gripper")
+    parser.add_argument("--eef-type", type=str, choices=["gripper", "dexhand", "tactile" , "sim"], default="gripper")
     parser.add_argument("--task-ids", type=str, nargs="+", help="task_327 task_351 ...", default=[])
     parser.add_argument("--cpus-per-task", type=int, default=3)
     parser.add_argument("--num-threads-per-task", type=int, default=2)

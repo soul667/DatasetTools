@@ -1,0 +1,4 @@
+task_train, exception details: [36mray::save_as_lerobot_dataset()[39m (pid=3434362, ip=10.16.118.8)
+  File "/data/axgu/code/DatasetTools/agibot_h5.py", line 254, in save_as_lerobot_dataset
+    features.pop("observation.images.head_depth")
+KeyError: 'observation.images.head_depth'

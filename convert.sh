@@ -4,4 +4,5 @@ uv run agibot_h5.py \
     --src-path /data/axgu/dataset/pack_in_the_supermarket\
     --output-path /data/axgu/dataset/pack_in_the_supermarket/lerobot \
     --eef-type sim \
-    --cpus-per-task 3
+    --cpus-per-task 3 \
+    --debug 

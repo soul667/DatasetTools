@@ -376,7 +376,9 @@ AgiBotWorld_BETA_TACTILE_CONFIG = {
 AgiBotWorld_TASK_TYPE = {
     "sim":{
         "task_config": AgiBotWorld_SIM_CONFIG,
-        "task_ids": [],  # The remaining are all gripper
+        "task_ids": [
+            "2810137"
+        ],  # The remaining are all gripper
     } ,
     "gripper": {
         "task_config": AgiBotWorld_BETA_GRIPPER_CONFIG,
