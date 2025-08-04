@@ -216,6 +216,7 @@ class AgiBotDataset(LeRobotDataset):
 
 def get_all_tasks(src_path: Path, output_path: Path):
     json_files = src_path.glob("task_info/*.json")
+    print(f"Found {len(list(json_files))} task_info files in {src_path}")
     for json_file in json_files:
         local_dir = output_path / "agibotworld" / json_file.stem
         yield (json_file, local_dir.resolve())
@@ -328,8 +329,9 @@ def main(
     save_depth: bool,
     debug: bool = False,
 ):
+    #print(f'debug mode: {debug}, save_depth: {save_depth}')
     tasks = get_all_tasks(src_path, output_path)
-
+    print(f"Total tasks found: {len(list(tasks))}")
     agibot_world_config, type_task_ids = (
         AgiBotWorld_TASK_TYPE[eef_type]["task_config"],
         AgiBotWorld_TASK_TYPE[eef_type]["task_ids"],
