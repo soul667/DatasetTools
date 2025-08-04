@@ -344,19 +344,23 @@ def main(
     #print(f'debug mode: {debug}, save_depth: {save_depth}')
     tasks = get_all_tasks_sim(src_path, output_path)
     print(f"Total tasks found: {len(list(tasks))}")
+
     agibot_world_config, type_task_ids = (
         AgiBotWorld_TASK_TYPE[eef_type]["task_config"],
         AgiBotWorld_TASK_TYPE[eef_type]["task_ids"],
     )
-
-    if eef_type == "gripper":
-        remaining_ids = AgiBotWorld_TASK_TYPE["dexhand"]["task_ids"] + AgiBotWorld_TASK_TYPE["tactile"]["task_ids"]
-        tasks = filter(lambda task: task[0].stem not in remaining_ids, tasks)
+    # sim 不用筛选
+    if eef_type == "sim":
+        pass
     else:
-        tasks = filter(lambda task: task[0].stem in type_task_ids, tasks)
+        if eef_type == "gripper":
+            remaining_ids = AgiBotWorld_TASK_TYPE["dexhand"]["task_ids"] + AgiBotWorld_TASK_TYPE["tactile"]["task_ids"]
+            tasks = filter(lambda task: task[0].stem not in remaining_ids, tasks)
+        else:
+            tasks = filter(lambda task: task[0].stem in type_task_ids, tasks)
 
-    if task_ids:
-        tasks = filter(lambda task: task[0].stem in task_ids, tasks)
+        if task_ids:
+            tasks = filter(lambda task: task[0].stem in task_ids, tasks)
 
     if debug:
         save_as_lerobot_dataset(agibot_world_config, next(tasks), num_threads_per_task, save_depth, debug)
