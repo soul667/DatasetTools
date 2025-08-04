@@ -27,6 +27,7 @@ from lerobot.datasets.utils import (
 from lerobot.datasets.video_utils import get_safe_default_codec
 from ray.runtime_env import RuntimeEnv
 
+import os
 
 class AgiBotDatasetMetadata(LeRobotDatasetMetadata):
     def save_episode(
@@ -221,6 +222,17 @@ def get_all_tasks(src_path: Path, output_path: Path):
         local_dir = output_path / "agibotworld" / json_file.stem
         yield (json_file, local_dir.resolve())
 
+# DatasetLists: list[Dataset] = []
+def get_all_tasks_sim(src_path: Path, output_path: Path):
+    for root, dirs, files in os.walk(src_path):
+            # print(f"Checking folder: {root}")
+        if("task_train.json" not in files):
+            continue
+        json_file = Path(root) / "task_train.json"
+        local_dir = output_path / "agibotworld" / "sim" / Path(root).name
+        if not local_dir.exists():
+            local_dir.mkdir(parents=True, exist_ok=True)
+        yield (json_file, local_dir.resolve())
 
 def save_as_lerobot_dataset(agibot_world_config, task: tuple[Path, Path], num_threads, save_depth, debug):
     json_file, local_dir = task
@@ -250,7 +262,6 @@ def save_as_lerobot_dataset(agibot_world_config, task: tuple[Path, Path], num_th
     )
 
     all_subdir = [f.as_posix() for f in src_path.glob(f"observations/{task_id}/*") if f.is_dir()]
-
     all_subdir_eids = sorted([int(Path(path).name) for path in all_subdir])
 
     if debug or not save_depth:
@@ -267,6 +278,7 @@ def save_as_lerobot_dataset(agibot_world_config, task: tuple[Path, Path], num_th
                 AgiBotWorld_CONFIG=agibot_world_config,
             )
             _, frames, videos = raw_dataset
+            
             if not all([video_path.exists() for video_path in videos.values()]):
                 print(f"{json_file.stem}, episode_{eid}: some of the videos does not exist, skipping...")
                 continue
@@ -330,7 +342,7 @@ def main(
     debug: bool = False,
 ):
     #print(f'debug mode: {debug}, save_depth: {save_depth}')
-    tasks = get_all_tasks(src_path, output_path)
+    tasks = get_all_tasks_sim(src_path, output_path)
     print(f"Total tasks found: {len(list(tasks))}")
     agibot_world_config, type_task_ids = (
         AgiBotWorld_TASK_TYPE[eef_type]["task_config"],
