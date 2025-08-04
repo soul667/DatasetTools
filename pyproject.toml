@@ -5,8 +5,11 @@ description = "a simple tools convert agibot datatasets to more genral format(le
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "h5py>=3.14.0",
     "lerobot>=0.3.2",
+    "ray>=2.48.0",
     "toml>=0.10.2",
+    "torch>=2.7.1",
     "tyro>=0.9.27",
 ]
     

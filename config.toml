@@ -1,2 +1,8 @@
-SourceDatasetPath="E:/code/DatasetTools" # 使用绝对路径
-OutDatasetPath="E:/code/DatasetTools/outdataset" # 输出的数据集路径
+src_path = "E:/code/3335935"
+output_path = "E:/code/3335935/output"
+eef_type = "gripper"
+# task_ids = ["task_327", "task_351"]
+cpus_per_task = 3
+num_threads_per_task = 2
+# save_depth = false
+debug = true
