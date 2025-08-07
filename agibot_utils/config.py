@@ -1,26 +1,32 @@
 AgiBotWorld_A2D_SIM_CONFIG = {
     "images": {
         "head": {
-            "dtype": "image",
+            "dtype": "video",
             "shape": (720, 1280, 3),
             "names": ["height", "width", "rgb"],
         },
         "hand_left": {
-            "dtype": "image",
+            "dtype": "video",
             "shape": (480, 848, 3),
             "names": ["height", "width", "rgb"],
         },
         "hand_right": {
-            "dtype": "image",
+            "dtype": "video",
             "shape": (480, 848, 3),
             "names": ["height", "width", "rgb"],
         },
     },
     "states": {
-        "effector.position": {
+        "left_effector.position": {
             "dtype": "float32",
-            "shape": (2,),
-            "names": {"motors": ["left_gripper", "right_gripper"]},
+            "shape": (1,),
+            "names": {"motors": ["left_gripper"]},
+        },
+        
+        "right_effector.position": {
+            "dtype": "float32",
+            "shape": (1,),
+            "names": {"motors": ["right_gripper"]},
         },
         "end.orientation": {"dtype": "float32", "shape": (2, 4), "names": {"motors": ["left_xyzw", "right_xyzw"]}},
         "end.position": {"dtype": "float32", "shape": (2, 3), "names": {"motors": ["left_xyz", "right_xyz"]}},
@@ -74,10 +80,16 @@ AgiBotWorld_A2D_SIM_CONFIG = {
         "waist.position": {"dtype": "float32", "shape": (2,), "names": {"motors": ["pitch", "lift"]}},
     },
     "actions": {
-        "effector.position": {
+        "left_effector.position": {
             "dtype": "float32",
-            "shape": (2,),
-            "names": {"motors": ["left_gripper", "right_gripper"]},
+            "shape": (1,),
+            "names": {"motors": ["left_gripper"]},
+        },
+        
+        "right_effector.position": {
+            "dtype": "float32",
+            "shape": (1,),
+            "names": {"motors": ["right_gripper"]},
         },
         "end.orientation": {"dtype": "float32", "shape": (2, 4), "names": {"motors": ["left_xyzw", "right_xyzw"]}},
         "end.position": {"dtype": "float32", "shape": (2, 3), "names": {"motors": ["left_xyz", "right_xyz"]}},
@@ -104,7 +116,6 @@ AgiBotWorld_A2D_SIM_CONFIG = {
                 ]
             },
         },
-        "robot.velocity": {"dtype": "float32", "shape": (2,), "names": {"motors": ["x_vel", "yaw_vel"]}},
         "waist.position": {"dtype": "float32", "shape": (2,), "names": {"motors": ["pitch", "lift"]}},
     },
 }

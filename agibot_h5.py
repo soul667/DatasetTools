@@ -159,7 +159,7 @@ class AgiBotDataset(LeRobotDataset):
         """
         if not episode_data:
             episode_buffer = self.episode_buffer
-
+        print(f" Video keys: {videos}")
         validate_episode_buffer(episode_buffer, self.meta.total_episodes, self.features)
 
         # size and task are special cases that won't be added to hf_dataset
@@ -235,7 +235,7 @@ def get_all_tasks_sim(src_path: Path, output_path: Path):
         # 处理的任务ID不对
         yield (json_file, local_dir.resolve())
 
-def save_as_lerobot_dataset(agibot_world_config, task: tuple[Path, Path], num_threads, save_depth, debug):
+def save_as_lerobot_dataset(agibot_world_config, job_ids, task: tuple[Path, Path], num_threads, save_depth, debug):
     json_file, local_dir = task
     # task_id= "2810137"  # TODO: FIXid
     src_path = json_file.parent.parent
@@ -268,7 +268,7 @@ def save_as_lerobot_dataset(agibot_world_config, task: tuple[Path, Path], num_th
     all_subdir=[]
     for root, dirs, files in os.walk(src_path):
         if "data_info.json" in files:
-            job_ids=agibot_world_config['job_ids']
+            # job_ids=agibot_world_config['job_ids']
             if(Path(root).name in job_ids):
                 # 只有我们筛选过合格的才加进去
                 all_subdir += [Path(root)]
@@ -290,7 +290,7 @@ def save_as_lerobot_dataset(agibot_world_config, task: tuple[Path, Path], num_th
             src_path_use= all_subdir_dict[f"{eid}"]
             raw_dataset = load_local_dataset(
                 eid,
-                src_path=str(src_path_use[f'{eid}']),
+                src_path=str(src_path_use),
                 task_id=task_id,
                 save_depth=save_depth,
                 AgiBotWorld_CONFIG=agibot_world_config,
@@ -359,19 +359,22 @@ def main(
     save_depth: bool,
     debug: bool = False,
 ):
+    # print('1111111111111111111111111111111')
     #print(f'debug mode: {debug}, save_depth: {save_depth}')
     tasks = list(get_all_tasks_sim(src_path, output_path)) # 原来返回的是一次性迭代器
     print(f"Total tasks found: {len(tasks)}")
 
-    agibot_world_config, type_task_ids = (
+    agibot_world_config, type_task_ids,job_ids = (
         AgiBotWorld_TASK_TYPE[eef_type]["task_config"],
         AgiBotWorld_TASK_TYPE[eef_type]["task_ids"],
+        AgiBotWorld_TASK_TYPE[eef_type]["job_ids"]
     )
     # sim 不用筛选
     if eef_type == "sim":
+        # print(f"Using AgiBotWorld config for {eef_type}: {agibot_world_config}")
         pass
     else:
-        print(f"Using AgiBotWorld config for {eef_type}: {agibot_world_config}")
+        # print(f"Using AgiBotWorld config for {eef_type}: {agibot_world_config}")
         if eef_type == "gripper":
             remaining_ids = AgiBotWorld_TASK_TYPE["dexhand"]["task_ids"] + AgiBotWorld_TASK_TYPE["tactile"]["task_ids"]
             tasks = filter(lambda task: task[0].stem not in remaining_ids, tasks)
@@ -383,7 +386,7 @@ def main(
     save_depth=False if eef_type == "sim" else save_depth
     if debug:
         # print(f"Debug mode enabled, processing only the first task: {tasks}")
-        save_as_lerobot_dataset(agibot_world_config,tasks[0], num_threads_per_task, save_depth, debug)
+        save_as_lerobot_dataset(agibot_world_config,job_ids,tasks[0], num_threads_per_task, save_depth, debug)
     else:
         runtime_env = RuntimeEnv(
             env_vars={
