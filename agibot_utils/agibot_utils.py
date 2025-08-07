@@ -23,12 +23,14 @@ def load_local_dataset(
     episode_id: int, src_path: str, task_id: int, save_depth: bool, AgiBotWorld_CONFIG: dict
 ) -> tuple[list, dict]:
     """Load local dataset and return a dict with observations and actions"""
-    ob_dir = Path(src_path) / f"observations/{task_id}/{episode_id}"
-    proprio_dir = Path(src_path) / f"proprio_stats/{task_id}/{episode_id}"
+    # ob_dir = Path(src_path) / f"observations/{task_id}/{episode_id}"
+    # proprio_dir = Path(src_path) / f"proprio_stats/{task_id}/{episode_id}"
+    proprio_dir = Path(src_path)
+    ob_dir=proprio_dir
 
     state = {}
     action = {}
-    with h5py.File(proprio_dir / "proprio_stats.h5", "r") as f:
+    with h5py.File(proprio_dir / "aligned_joints.h5", "r") as f:
         for key in AgiBotWorld_CONFIG["states"]:
             state[f"observation.states.{key}"] = np.array(f["state/" + key.replace(".", "/")], dtype=np.float32)
         for key in AgiBotWorld_CONFIG["actions"]:
@@ -86,7 +88,7 @@ def load_local_dataset(
     ]
 
     videos = {
-        f"observation.images.{key}": ob_dir / "videos" / f"{key}_color.mp4"
+        f"observation.images.{key}": ob_dir / f"{key}_color.mp4"
         if "sensor" not in key
         else ob_dir / "tactile" / f"{key}.mp4"  # HACK: handle tactile videos
         for key in AgiBotWorld_CONFIG["images"]

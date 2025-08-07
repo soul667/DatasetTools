@@ -1,3 +1,113 @@
+AgiBotWorld_A2D_SIM_CONFIG = {
+    "images": {
+        "head": {
+            "dtype": "image",
+            "shape": (720, 1280, 3),
+            "names": ["height", "width", "rgb"],
+        },
+        "hand_left": {
+            "dtype": "image",
+            "shape": (480, 848, 3),
+            "names": ["height", "width", "rgb"],
+        },
+        "hand_right": {
+            "dtype": "image",
+            "shape": (480, 848, 3),
+            "names": ["height", "width", "rgb"],
+        },
+    },
+    "states": {
+        "effector.position": {
+            "dtype": "float32",
+            "shape": (2,),
+            "names": {"motors": ["left_gripper", "right_gripper"]},
+        },
+        "end.orientation": {"dtype": "float32", "shape": (2, 4), "names": {"motors": ["left_xyzw", "right_xyzw"]}},
+        "end.position": {"dtype": "float32", "shape": (2, 3), "names": {"motors": ["left_xyz", "right_xyz"]}},
+        "head.position": {"dtype": "float32", "shape": (2,), "names": {"motors": ["yaw", "patch"]}},
+        "joint.current_value": {
+            "dtype": "float32",
+            "shape": (14,),
+            "names": {
+                "motors": [
+                    "left_arm_0",
+                    "left_arm_1",
+                    "left_arm_2",
+                    "left_arm_3",
+                    "left_arm_4",
+                    "left_arm_5",
+                    "left_arm_6",
+                    "right_arm_0",
+                    "right_arm_1",
+                    "right_arm_2",
+                    "right_arm_3",
+                    "right_arm_4",
+                    "right_arm_5",
+                    "right_arm_6",
+                ]
+            },
+        },
+        "joint.position": {
+            "dtype": "float32",
+            "shape": (14,),
+            "names": {
+                "motors": [
+                    "left_arm_0",
+                    "left_arm_1",
+                    "left_arm_2",
+                    "left_arm_3",
+                    "left_arm_4",
+                    "left_arm_5",
+                    "left_arm_6",
+                    "right_arm_0",
+                    "right_arm_1",
+                    "right_arm_2",
+                    "right_arm_3",
+                    "right_arm_4",
+                    "right_arm_5",
+                    "right_arm_6",
+                ]
+            },
+        },
+        "robot.orientation": {"dtype": "float32", "shape": (4,), "names": {"motors": ["x", "y", "z", "w"]}},
+        "robot.position": {"dtype": "float32", "shape": (3,), "names": {"motors": ["x", "y", "z"]}},
+        "waist.position": {"dtype": "float32", "shape": (2,), "names": {"motors": ["pitch", "lift"]}},
+    },
+    "actions": {
+        "effector.position": {
+            "dtype": "float32",
+            "shape": (2,),
+            "names": {"motors": ["left_gripper", "right_gripper"]},
+        },
+        "end.orientation": {"dtype": "float32", "shape": (2, 4), "names": {"motors": ["left_xyzw", "right_xyzw"]}},
+        "end.position": {"dtype": "float32", "shape": (2, 3), "names": {"motors": ["left_xyz", "right_xyz"]}},
+        "head.position": {"dtype": "float32", "shape": (2,), "names": {"motors": ["yaw", "patch"]}},
+        "joint.position": {
+            "dtype": "float32",
+            "shape": (14,),
+            "names": {
+                "motors": [
+                    "left_arm_0",
+                    "left_arm_1",
+                    "left_arm_2",
+                    "left_arm_3",
+                    "left_arm_4",
+                    "left_arm_5",
+                    "left_arm_6",
+                    "right_arm_0",
+                    "right_arm_1",
+                    "right_arm_2",
+                    "right_arm_3",
+                    "right_arm_4",
+                    "right_arm_5",
+                    "right_arm_6",
+                ]
+            },
+        },
+        "robot.velocity": {"dtype": "float32", "shape": (2,), "names": {"motors": ["x_vel", "yaw_vel"]}},
+        "waist.position": {"dtype": "float32", "shape": (2,), "names": {"motors": ["pitch", "lift"]}},
+    },
+}
 AgiBotWorld_SIM_CONFIG = {
     "images": {
         "head": {
@@ -375,14 +485,42 @@ AgiBotWorld_BETA_TACTILE_CONFIG = {
 # Task statistics coming from https://docs.google.com/spreadsheets/d/1GWMFHYo3UJADS7kkScoJ5ObbQfAFasPuaeC7TJUr1Cc/edit?gid=0#gid=0
 AgiBotWorld_TASK_TYPE = {
     "sim":{
-        "task_config": AgiBotWorld_SIM_CONFIG,
+        "task_config": AgiBotWorld_A2D_SIM_CONFIG,
         "task_ids": [
-            "2810137"
+            # "task_0_train",
+            # "task_1_train",
+            # "task_2_train",
+            # "task_3_train",
+            # "task_4_train",
+            # "task_5_train",
+            # "task_6_train",
+            # "task_7_train",
+            # "task_8_train",
+            # "task_9_train",
+            # "task_10_train"
         ],  # The remaining are all gripper
+        "use_job_ids":True,
+        "job_ids":[
+            "12054834",
+            "12054877",
+            "12055136",
+            "12055201",
+            "12055201",
+            "12055225",
+            "12055366",
+            "12055366",
+            "12055373",
+            "12055399",
+            "12055409",
+            "12056273",
+            "12056267"
+        ]
+
     } ,
     "gripper": {
         "task_config": AgiBotWorld_BETA_GRIPPER_CONFIG,
         "task_ids": [],  # The remaining are all gripper
+
     },
     "dexhand": {
         "task_config": AgiBotWorld_BETA_DEXHAND_CONFIG,
