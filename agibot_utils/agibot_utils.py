@@ -31,9 +31,12 @@ def load_local_dataset(
     state = {}
     action = {}
     with h5py.File(proprio_dir / "aligned_joints.h5", "r") as f:
+        print("Loading proprio data from:", proprio_dir / "aligned_joints.h5")
         for key in AgiBotWorld_CONFIG["states"]:
+            print(f"Loading state: state.{key}")
             state[f"observation.states.{key}"] = np.array(f["state/" + key.replace(".", "/")], dtype=np.float32)
         for key in AgiBotWorld_CONFIG["actions"]:
+            print(f"Loading state: action.{key}")
             action[f"actions.{key}"] = np.array(f["action/" + key.replace(".", "/")], dtype=np.float32)
 
         # HACK: agibot team forgot to pad or filter some of the values
